@@ -1,0 +1,69 @@
+# A docker compose to create a MySql persistent database.
+# usefull guide: https://stavshamir.github.io/python/dockerizing-a-flask-mysql-app-with-docker-compose/
+
+version: '3'
+ 
+services:
+  db:
+    image: mysql:8
+    container_name: dataflow_utils_db
+    
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: dataflow_db
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+    ports:
+      - "6033:3306"
+    volumes:
+      # - "./mysql/my.cnf:/etc/mysql/my.cnf" #For allowing CSV import
+      # - "../utils/dataflow_utils/mysql.cnf:/etc/mysql/conf.d/mysql.cnf" #For allowing CSV import
+      # - "./mysql/dataflow_DB_SD_mysql.sql:/docker-entrypoint-initdb.d/schema.sql" #For DB schema
+      # - "./mysql/extendedDataflowsView_mysql.sql:/docker-entrypoint-initdb.d/views.sql" # For additionnal DB views
+      # - "../utils/dataflow_utils/utilityTables_mysql.sql:/docker-entrypoint-initdb.d/utils.sql" # For additionnal utility tables
+      # - db_data_sd:/var/lib/mysql #For DB persistent data
+      # - "../utils/dataflow_utils/countries_codes_iso.csv:/countries_codes_iso.csv" # For additionnal utility tables
+      # - "../utils/dataflow_utils/known_dataflowtypes.csv:/known_dataflowtypes.csv" # For additionnal utility tables
+      # - "../examples/mysql/mysql_example.sql:/mysql_example.sql" #For our fictive example      
+      # - ./db:/docker-entrypoint-initdb.d/:ro # mage’s specification runs all .sql scripts in the given directory
+
+      # Config file for allowing CSV import
+      - "./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf"
+      # CSV files to import
+      - "./known_dataflowtypes.csv:/known_dataflowtypes.csv" # For Known Dataflow Types & Subtypes
+      - "./countries_codes_iso.csv:/countries_codes_iso.csv" # For ISO Alpha-3 & Alpha2 Countries codes (ISO 3166-1)
+      # SQL Script for creating Tables (based on DBML schema) and import CSV files
+      - "./mysql/utilityTables_mysql.sql:/docker-entrypoint-initdb.d/utils.sql"
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: dataflow_utils_dbadmin
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: dataflow_utils_db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8888:80
+# Section to be incommented for disabling automatic startup of phpmyadmin
+    # profiles:
+      # - db_admin 
+
+# To be used separately with: docker-compose run dbml_cli sh -c "cd /home/sql_scripts/ && sh"
+  dbml_cli:
+    build: ./deploy/dbml_cli/
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    ports:
+      - 3000:3000
+    volumes:
+      - ./UtilityTables.dbml:/home/sql_scripts/UtilityTables.dbml
+      - ./mysql/:/home/sql_scripts/mysql/
+      # - ./postgresql/:/home/sql_scripts/postgresql/
+    profiles: 
+      - with_dbml_cli

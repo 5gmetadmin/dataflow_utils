@@ -1,0 +1,13 @@
+dataflowType,dataflowSubType,dataflowFormat
+application,,json
+audio,,mp3
+cits,cam,asn1_uper;asn1_jer
+cits,cpm,asn1_uper;asn1_jer
+cits,denm,asn1_uper;asn1_jer
+cits,mapem,asn1_uper;asn1_jer
+cits,spatem,asn1_uper;asn1_jer
+cits,ssem,asn1_uper;asn1_jer
+cits,srem,asn1_uper;asn1_jer
+image,,
+text,,
+video,,mp4;H264

@@ -1,0 +1,15 @@
+// Utility Tables
+
+table utilsCountryCodes {
+  countryCode varchar(3) [pk, note: 'ISO 3166-1 Alpha-3 Country Code']
+  countryCodeAlpha2 varchar(2) [not null, note: 'ISO 3166-1 Alpha-2 Country Code']
+  countryName varchar [not null, note: 'Official Country Name']
+  countryNumericCode tinyint [not null, note: 'ISO 3166-1 Numeric Code']
+}
+
+table utilsKnownDataflowTypes {
+  id int [pk, increment]
+  dataflowType varchar [not null, note: "potential values: application, audio, cits, image, text, video"]
+  dataflowSubType varchar [note: "potential values: cam, denm, webrtc, jpeg..."]
+  dataflowFormat varchar [note: "list of semicolon seperated formats, potential values like json, asn1_jer, H264, mp4 ..."]
+}
