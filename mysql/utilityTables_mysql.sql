@@ -1,6 +1,3 @@
--- Interesting discussion regarding JSON storage in RDBMS vs NoSQL: https://stackoverflow.com/questions/15367696/storing-json-in-database-vs-having-a-new-column-for-each-key
--- Tutorial for importing CSV with MySQL: https://www.mysqltutorial.org/import-csv-file-mysql-table/
-
 -- SQL Script for adding the utility tables related to datatypes and country codes
 
 CREATE TABLE IF NOT EXISTS `utilsCountryCodes` (

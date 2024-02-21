@@ -1,5 +1,4 @@
 # A docker compose to create a MySql persistent database.
-# usefull guide: https://stavshamir.github.io/python/dockerizing-a-flask-mysql-app-with-docker-compose/
 
 version: '3'
  
@@ -17,17 +16,6 @@ services:
     ports:
       - "6033:3306"
     volumes:
-      # - "./mysql/my.cnf:/etc/mysql/my.cnf" #For allowing CSV import
-      # - "../utils/dataflow_utils/mysql.cnf:/etc/mysql/conf.d/mysql.cnf" #For allowing CSV import
-      # - "./mysql/dataflow_DB_SD_mysql.sql:/docker-entrypoint-initdb.d/schema.sql" #For DB schema
-      # - "./mysql/extendedDataflowsView_mysql.sql:/docker-entrypoint-initdb.d/views.sql" # For additionnal DB views
-      # - "../utils/dataflow_utils/utilityTables_mysql.sql:/docker-entrypoint-initdb.d/utils.sql" # For additionnal utility tables
-      # - db_data_sd:/var/lib/mysql #For DB persistent data
-      # - "../utils/dataflow_utils/countries_codes_iso.csv:/countries_codes_iso.csv" # For additionnal utility tables
-      # - "../utils/dataflow_utils/known_dataflowtypes.csv:/known_dataflowtypes.csv" # For additionnal utility tables
-      # - "../examples/mysql/mysql_example.sql:/mysql_example.sql" #For our fictive example      
-      # - ./db:/docker-entrypoint-initdb.d/:ro # mage’s specification runs all .sql scripts in the given directory
-
       # Config file for allowing CSV import
       - "./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf"
       # CSV files to import
